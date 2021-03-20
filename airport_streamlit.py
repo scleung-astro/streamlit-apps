@@ -225,6 +225,13 @@ def main():
             "The app will find the shortest transition path for you.")
     st.write("Written by Shing Chi Leung at 8 March 2021.")
 
+    if st.checkbox("Show Instruction"):
+        st.write("1. Open the subpanel (click > on upper left)")
+        st.write("2. Choose the country and the corresponding airports for both "
+            "departure and arrival.")
+        st.write("3. Click whether you want direct flight or flights with 1- or 2- transfers.")
+        st.write("4. Choose Show Map to see the location of your target airports.")
+
     df_airport, df_routes = load_data()
     country_list = get_country_list(df_airport)
 
@@ -267,6 +274,8 @@ def main():
 
     if show_map:
 
+        st.write("Map for your departure and arrival airports.")
+        st.write("Note: Try to move the map a bit if the points locate at some weird positions.")
         df_coord = pd.DataFrame(columns=["lat", "lon"])
         if use_direct_flight:
             df_coord = pd.concat([df_coord, coord0])
@@ -279,7 +288,8 @@ def main():
 
     st.sidebar.title("Info")
     st.sidebar.info("A short apps for finding airport connection with existing flights. "
-                "Written by Shing Chi Leung at 8 March 2021. ")
+                "Written by Shing Chi Leung at 8 March 2021. See GitHub for source code "
+                "and the data source.")
 
 
 if __name__=="__main__":

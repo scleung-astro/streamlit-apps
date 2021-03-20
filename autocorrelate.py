@@ -26,18 +26,32 @@ def main():
         "hope to demonstrate the role of noise in autocorrelation and autoregression.")
     st.write("Written by Shing Chi Leung at 19 March 2021.")
 
+    if st.checkbox("See instruction"):
+        st.write("Procedure")
+        st.write("1. Open the option subpanel on the left (click >)")
+        st.write(r"2. Design your own periodic function by choosing their corresponding amplitudes $b_n$.")
+        st.write("3. The original function is defined as: ($x = 0, 0.01, 0.02, ..., 10.0$)")
+        st.write(r""" 
+        $$
+        f(x) = \sum_{i=1}^5 b_n \sin (n \pi x) + r_n U(0,1),
+        $$
+        """)
+        st.write(r"where $r_n$ is the random noise.")
+        st.write("4. Choose Add Noise to include noise and choose its amplitude. Otherwise $r_n = 0$ by default.")
+        st.write("5. Then click and see the auto-correlation and auto-regression results.")
+
     # side bar for options
     st.sidebar.title("Options")
-    st.sidebar.subheader("Setting for Autocorrelation")
+    st.sidebar.subheader("Design your function")
     n_modes = int(st.sidebar.select_slider("Number of modes", options=[1,2,3,4,5], value=1))
 
     # select amp for the mode amplitudes
     amp = [1 for i in range(n_modes)]
     for i in range(n_modes):
         if i == 0:
-            amp[i] = st.sidebar.select_slider("Amplitude of Mode " + str(i), options=[round((i+1)*0.1,1) for i in range(10)], value=0.1)    
+            amp[i] = st.sidebar.select_slider("Amplitude of Mode " + str(i+1), options=[round((i+1)*0.1,1) for i in range(10)], value=0.1)    
         else:
-            amp[i] = st.sidebar.select_slider("Amplitude of Mode " + str(i), options=[round((i)*0.1,1) for i in range(11)], value=0.1)    
+            amp[i] = st.sidebar.select_slider("Amplitude of Mode " + str(i+1), options=[round((i)*0.1,1) for i in range(11)], value=0.1)    
 
     # select noise_amp for the noise amplitudes
     noise_amp = 0
@@ -61,22 +75,25 @@ def main():
             y[i] += amp[j] * math.sin((j+1) * math.pi * x[i])
 
 
-    # Autocorrelation section
-    st.subheader("Autocorrelation")
-    st.write("Autocorrelation is defined by:")
-    st.write(r"""
-    $$
-    AR_k = \frac{\Sigma_i(y_{i+k}-\bar{y}) (y_i-\bar{y})}{[\Sigma_i(y_i-\bar{y})]^2}
-    $$
-    """)
-    st.write(" ")
-
+    st.subheader("Source Data")
     if st.checkbox("Show plot"):
         fig, ax = plt.subplots(nrows=1, ncols=1)
         ax.plot(x,y)
         ax.set_title("Primitive time series")
         ax.set_xlim(0,6)
         st.pyplot(fig)
+
+    # Autocorrelation section
+    st.subheader("Autocorrelation")
+    st.write("Autocorrelation is defined by:")
+    st.write(r"""
+    $$
+    AR_k = \frac{\sum_i(y_{i+k}-\bar{y}) (y_i-\bar{y})}{[\sum_i(y_i-\bar{y})]^2},
+    $$
+    """)
+    st.write(r"where $\bar{y}$ is the mean of $y$ with $y_i$ being the i-th data point.")
+
+    
 
     # calculate the auto-correlation function
     acr = [0 for i in range(n_autoreg)]
@@ -109,7 +126,7 @@ def main():
     y_m = \sum_{i=0}^n a_i y_{m-i}
     $$
     """)
-    st.write(r"By using historical data, we can fit the coefficient $a_i$, then we can use the coefficient and "
+    st.write(r"By using historical data, we can fit the coefficient $a_i$, then we can use the coefficients and "
         "new data to predict the future data. Here we can experience how a very small noise can destroy the predictatbility "
         "of this method.")
 

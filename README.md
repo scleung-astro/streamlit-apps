@@ -15,3 +15,5 @@ future data based on previous pattern. The role of noise is also explored.
 This is a practical app for finding the connection between two airports based on
 flight route database (though last updated in 2014). The position of the destination
 and departure airports are also shown in a map for illustration purpose.
+(Source data: airport.dat.txt and routes.dat.txt are obtained from 
+https://openflights.org/data.html.)
